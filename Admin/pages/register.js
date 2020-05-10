@@ -4,11 +4,6 @@ import { useState } from "react";
 import {firebase, auth} from "../firebase"
 import{ useRouter } from "next/router";
 const Register = () => {
-  const [name,setName]=useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  function signUp=()=>{
-  }
   return (
     <Layout2>
       <div className="page-wrapper">
@@ -30,8 +25,6 @@ const Register = () => {
                         type="text"
                         name="username"
                         placeholder="Username"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -41,8 +34,6 @@ const Register = () => {
                         type="email"
                         name="email"
                         placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
@@ -52,8 +43,6 @@ const Register = () => {
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                       />
                     </div>
                     <div className="login-checkbox">
@@ -65,7 +54,6 @@ const Register = () => {
                     <button
                       className="au-btn au-btn--block au-btn--green m-b-20"
                       type="submit"
-                      onClick={onRegister}
                     >
                       register
                     </button>
