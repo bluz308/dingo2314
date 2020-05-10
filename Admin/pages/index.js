@@ -24,7 +24,6 @@ const Login = () => {
                         type="email"
                         name="email"
                         placeholder="Email"
-                       
                       />
                     </div>
                     <div className="form-group">
@@ -34,7 +33,6 @@ const Login = () => {
                         type="password"
                         name="password"
                         placeholder="Password"
-                     
                       />
                     </div>
                     <div className="login-checkbox">
@@ -43,17 +41,14 @@ const Login = () => {
                         Remember Me
                       </label>
                     </div>
-                    <button
-                      className="au-btn au-btn--block au-btn--green m-b-20"
-          
-                    >
+                    <button className="au-btn au-btn--block au-btn--green m-b-20">
                       sign in
                     </button>
                   </form>
                   <div className="register-link">
                     <p>
                       Don't you have account?
-                      <Link href="../register">Sign Up Here</Link>
+                      <Link href="register">Sign Up Here</Link>
                     </p>
                   </div>
                 </div>
