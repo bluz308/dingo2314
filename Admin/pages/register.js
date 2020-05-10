@@ -1,8 +1,5 @@
 import Layout2 from "../components/Layout2";
 import Link from "next/link"
-import { useState } from "react";
-import {firebase, auth} from "../firebase"
-import{ useRouter } from "next/router";
 const Register = () => {
   return (
     <Layout2>

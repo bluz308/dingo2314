@@ -1,7 +1,6 @@
 import Layout from "../components/Layout";
 import React, { Component, useEffect, useState } from "react";
 import { firebase } from "../firebase";
-import Axios from "axios";
 const singleBlog = ({ articles }) => {
   const [value, setValue] = useState({});
   const updateContent = () => {
