@@ -3,17 +3,19 @@ import Footer from "../components/Footer";
 import { firebase } from "../firebase";
 import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import Statistic from "../components/statistic";
 import withAuth from "../withAuth";
 import Link from "next/link";
-const MyButton = React.forwardRef(({ onClick, href }, ref) => {
-  return (
-    <a href={href} onClick={onClick} ref={ref}>
-      Edit
-    </a>
-  );
-});
+const MyButton = React.forwardRef(
+  ({ onClick, href, children, className }, ref) => {
+    return (
+      <button className={className} href={href} onClick={onClick} ref={ref}>
+        {children}
+      </button>
+    );
+  }
+);
 const Blog = () => {
   const [article, setArticle] = useState([]);
   useEffect(() => {
@@ -29,16 +31,6 @@ const Blog = () => {
         setArticle(arrData);
       });
   }, [article]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
-    setShow(true);
-  };
-  const [show2, setShow2] = useState(false);
-  const handleClose2 = () => setShow2(false);
-  const handleShow2 = () => {
-    setShow2(true);
-  };
   const onDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this ???")) {
       firebase
@@ -60,12 +52,10 @@ const Blog = () => {
   };
   const saveValue = () => {
     firebase.firestore().collection("reservation").doc(person.id).set(person);
-    handleClose();
   };
   const [data, setData] = useState({});
   const addGuest = () => {
     firebase.firestore().collection("reservation").add(data);
-    handleClose2();
   };
   return (
     <Layout>
@@ -92,13 +82,12 @@ const Blog = () => {
                 <div className="col-md-12">
                   <h3 className="title-5 m-b-35">Blog</h3>
                   <div className="table-data__tool-right">
-                    <button
-                      className="au-btn au-btn-icon au-btn--green au-btn--small m-b-35"
-                      onClick={handleShow2}
-                    >
-                      <i className="zmdi zmdi-plus" />
-                      Add a Customer
-                    </button>
+                    <Link href="newblog">
+                      <MyButton className="au-btn au-btn-icon au-btn--green au-btn--small">
+                        <i className="zmdi zmdi-plus" />
+                        Add
+                      </MyButton>
+                    </Link>
                   </div>
                   <div className="table-responsive table-responsive-data2">
                     <table className="table table-data2">
@@ -113,314 +102,14 @@ const Blog = () => {
                       </thead>
 
                       <tbody>
-                        {/*Add*/}
-                        <Modal show={show2} onHide={handleClose2}>
-                          <Modal.Header closeButton>
-                            <Modal.Title>Add</Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <div>
-                              <div className="form-group">
-                                <label>Name</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setData({ ...data, name: e.target.value })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Phone</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      phone: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Email</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      email: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Time</label>
-                                <select
-                                  className="form-control"
-                                  id="Select2"
-                                  required
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      time: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>Time</option>
-                                  <option>8 AM TO 10AM</option>
-                                  <option>10 AM TO 12PM</option>
-                                  <option>12PM TO 2PM</option>
-                                  <option>2PM TO 4PM</option>
-                                  <option>4PM TO 6PM</option>
-                                  <option>6PM TO 8PM</option>
-                                  <option>4PM TO 10PM</option>
-                                  <option>10PM TO 12PM</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Date</label>
-                                <input
-                                  type="date"
-                                  id="example-date-input"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      date: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Status</label>
-                                <select
-                                  className="form-control"
-                                  id="Select2"
-                                  required
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      status: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>Status</option>
-                                  <option>Pending</option>
-                                  <option>Confirmed</option>
-                                  <option>Denied</option>
-                                  <option>Done</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Guest</label>
-                                <select
-                                  className="form-control"
-                                  id="Select2"
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      nog: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5+</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Note</label>
-                                <textarea
-                                  onChange={(e) =>
-                                    setData({
-                                      ...data,
-                                      note: e.target.value,
-                                    })
-                                  }
-                                  className="form-control"
-                                />
-                              </div>
-                            </div>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose2}>
-                              Close
-                            </Button>
-                            <Button
-                              variant="primary"
-                              onClick={() => addGuest()}
-                            >
-                              Save Changes
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                        {/* End Add*/}
-                        {/* Start Edit*/}
-                        <Modal show={show} onHide={handleClose}>
-                          <Modal.Header closeButton>
-                            <Modal.Title>Edit</Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <div>
-                              <div className="form-group">
-                                <label>Name</label>
-                                <input
-                                  placeholder={person.name}
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      name: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Phone</label>
-                                <input
-                                  placeholder={person.phone}
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      phone: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Email</label>
-                                <input
-                                  placeholder={person.email}
-                                  type="text"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      email: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Time</label>
-                                <select
-                                  defaultValue={person.time}
-                                  className="form-control"
-                                  id="Select2"
-                                  required
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      time: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>8 AM TO 10AM</option>
-                                  <option>10 AM TO 12PM</option>
-                                  <option>12PM TO 2PM</option>
-                                  <option>2PM TO 4PM</option>
-                                  <option>4PM TO 6PM</option>
-                                  <option>6PM TO 8PM</option>
-                                  <option>4PM TO 10PM</option>
-                                  <option>10PM TO 12PM</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Date</label>
-                                <input
-                                  defaultValue={person.date}
-                                  type="date"
-                                  id="example-date-input"
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      date: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                              <div className="form-group">
-                                <label>Status</label>
-                                <select
-                                  defaultValue={person.status}
-                                  className="form-control"
-                                  id="Select2"
-                                  required
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      status: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>Pending</option>
-                                  <option>Confirmed</option>
-                                  <option>Denied</option>
-                                  <option>Done</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Guest</label>
-                                <select
-                                  className="form-control"
-                                  id="Select2"
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      nog: e.target.value,
-                                    })
-                                  }
-                                >
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5+</option>
-                                </select>
-                              </div>
-                              <div className="form-group">
-                                <label>Note</label>
-                                <textarea
-                                  placeholder={person.note}
-                                  onChange={(e) =>
-                                    setPerson({
-                                      ...person,
-                                      note: e.target.value,
-                                    })
-                                  }
-                                  className="form-control"
-                                />
-                              </div>
-                            </div>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                              Close
-                            </Button>
-                            <Button
-                              variant="primary"
-                              onClick={() => saveValue()}
-                            >
-                              Save Changes
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                        {/* End Edit*/}
-
                         {article.map((data) => (
                           <>
                             <tr className="tr-shadow" key={data.id}>
                               <td>
-                                <img src={data.thumbnail}></img>
+                                <img
+                                  style={{ width: "10em" }}
+                                  src={data.thumbnail}
+                                ></img>
                               </td>
                               <td>{data.title}</td>
                               <td className="desc">{data.author}</td>
@@ -432,7 +121,9 @@ const Blog = () => {
                               </td>
                               <td>
                                 <Link href="[id]" as={`${data.slug}`} passHref>
-                                  <MyButton />
+                                  <MyButton>
+                                    Edit
+                                  </MyButton>
                                 </Link>
                               </td>
                             </tr>

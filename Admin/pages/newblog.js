@@ -1,39 +1,50 @@
 import Layout from "../components/Layout";
 import React, { Component, useEffect, useState } from "react";
-import {Toast, Row,Col,Button}  from "react-bootstrap";
+import { Toast, Row, Col, Button } from "react-bootstrap";
 import { firebase, storage } from "../firebase";
 import { useRouter } from "next/router";
-const singleBlog = ({ articles }) => {
-  const Router=useRouter()
-    const [showToast, setShowToast] = useState(false);
+const newBlog = () => {
+  const Router = useRouter();
+  const [showToast, setShowToast] = useState(false);
   const [value, setValue] = useState({});
-  console.log(value)
+  console.log(value);
   const updateContent = () => {
-    firebase.firestore().collection("articles").doc(`${value.id}`).set(value)
-    console.log(value)
+    setValue({
+      ...value,
+      slug: value.title
+        .toLowerCase()
+        .replace(/[^\w ]+/g, "")
+        .replace(/ +/g, "-"),
+    });
+    firebase.firestore().collection("articles").add(value);
+    console.log(value);
     setShowToast(true);
-    Router.push(`/${articles.slug}`)
   };
   const ReactQuill =
     typeof window === "object" ? require("react-quill") : () => false;
 
-    const uploadThumb=(e)=>{
-       const image =(e);
-       const uploadTask= storage.ref(`blog thumb/${image.name}`).put(image);
-       uploadTask.on('state_changed',
-       (snapshot)=>{
-         console.log(snapshot);
-       },
-       (error)=>{
-         console.log(error);
-       },
-       ()=>{
-         storage.ref("blog thumb").child(image.name).getDownloadURL().then(url=>{
-           setValue({...articles, thumbnail:url})
-         })
-       }
-       )
-    }
+  const uploadThumb = (e) => {
+    const image = e;
+    const uploadTask = storage.ref(`blog thumb/${image.name}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        console.log(snapshot);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("blog thumb")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            setValue({ ...value, thumbnail: url });
+          });
+      }
+    );
+  };
   return (
     <Layout>
       <div className="page-wrapper">
@@ -52,9 +63,7 @@ const singleBlog = ({ articles }) => {
                           delay={3000}
                           autohide
                         >
-                          <Toast.Body>
-                            Update Success
-                          </Toast.Body>
+                          <Toast.Body>Update Success</Toast.Body>
                         </Toast>
                       </Col>
                     </Row>
@@ -69,18 +78,48 @@ const singleBlog = ({ articles }) => {
                       <hr className="line-seprate" />
                       <label>Title</label>
                       <input
-                        defaultValue={articles.title}
                         type="text"
-                        id="example-date-input"
                         className="form-control"
+                        onChange={(e) =>
+                          setValue({ ...value, title: e.target.value })
+                        }
                       />
                     </div>
                     <div className="form-group">
                       <label>Preview</label>
                       <textarea
-                        defaultValue={articles.preview}
                         className="form-control"
+                        onChange={(e) =>
+                          setValue({ ...value, preview: e.target.value })
+                        }
                       />
+                    </div>
+                    <div className="form-group">
+                      <label>Author</label>
+                      <textarea
+                        className="form-control"
+                        onChange={(e) =>
+                          setValue({ ...value, author: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Category</label>
+                      <select
+                        className="form-control"
+                        id="Select2"
+                        onChange={(e) =>
+                          setValue({
+                            ...value,
+                            category: e.target.value,
+                          })
+                        }
+                      >
+                        <option>DIY</option>
+                        <option>Restaurant Food</option>
+                        <option>Hotel Review</option>
+                        <option>Eating Out</option>
+                      </select>
                     </div>
 
                     <div className="form-group">
@@ -93,17 +132,13 @@ const singleBlog = ({ articles }) => {
                       />
                     </div>
                     <div className="form-group">
-                      <img
-                        style={{ width: "10em" }}
-                        src={articles.thumbnail}
-                      ></img>
+                      <img style={{ width: "10em" }}></img>
                     </div>
                   </div>
                   <div className="table-responsive table-responsive-data2">
                     <label>Content</label>
                     <ReactQuill
-                      defaultValue={articles.content}
-                      onChange={(e) => setValue({ ...articles, content: e })}
+                      onChange={(e) => setValue({ ...value, content: e })}
                     ></ReactQuill>
                   </div>
                 </div>
@@ -118,25 +153,4 @@ const singleBlog = ({ articles }) => {
   );
 };
 
-singleBlog.getInitialProps = async function (context) {
-  const { id } = context.query;
-  let article = await firebase
-    .firestore()
-    .collection("articles")
-    .where("slug", "==", id)
-    .get()
-    .then((snapshot) => {
-      let arrData = [];
-      snapshot.forEach((doc) => {
-        arrData.push({ id: doc.id, ...doc.data() });
-      });
-      return arrData;
-    })
-    .catch(() => {
-      return {};
-    });
-  return {
-    articles: article[0],
-  };
-};
-export default singleBlog;
+export default newBlog;
