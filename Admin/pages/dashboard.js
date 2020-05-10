@@ -5,7 +5,6 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import React, { useState, useEffect } from "react";
 import Statistic from "../components/statistic";
-import withAuth from "../withAuth";
 const Index = () => {
   const [guests, setGuests] = useState([]);
   useEffect(() => {

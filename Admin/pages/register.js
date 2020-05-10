@@ -4,18 +4,10 @@ import { useState } from "react";
 import {firebase, auth} from "../firebase"
 import{ useRouter } from "next/router";
 const Register = () => {
-  const router=useRouter();
   const [name,setName]=useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   function signUp=()=>{
-    auth.createUserWithEmailAndPassword(email,password)
-    .then((user)=>{
-      router.push('/')
-    })
-    .catch((error)=>{
-      console.log(error)
-    })
   }
   return (
     <Layout2>

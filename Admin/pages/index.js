@@ -1,7 +1,6 @@
 import Layout2 from "../components/Layout2";
 import Link from "next/link";
 import { useState } from "react";
-import { auth } from "../firebase";
 import router from "next/router";
 const Login = () => {
   return (
