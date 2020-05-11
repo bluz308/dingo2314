@@ -2,7 +2,9 @@ import Layout2 from "../components/Layout2";
 import router from "next/router";
 import React, { useState, useEffect, Children } from "react";
 import Link from "next/link";
-const MyButton = React.forwardRef(
+
+const Login = () => {
+  const MyButton = React.forwardRef(
   ({ onClick, href, children, className }, ref) => {
     return (
       <button className={className} href={href} onClick={onClick} ref={ref}>
@@ -11,7 +13,6 @@ const MyButton = React.forwardRef(
     );
   }
 );
-const Login = () => {
   return (
     <Layout2>
       <div className="page-wrapper">
@@ -50,10 +51,10 @@ const Login = () => {
                         Remember Me
                       </label>
                     </div>
-                    <Link href="dashboard" passHref>
-                      <Mybutton className="au-btn au-btn--block au-btn--green m-b-20">
+                    <Link href="dashboard">
+                      <MyButton className="au-btn au-btn--block au-btn--green m-b-20">
                         sign in
-                      </Mybutton>
+                      </MyButton>
                     </Link>
                   </form>
                   <div className="register-link">
