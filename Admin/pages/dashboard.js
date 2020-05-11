@@ -76,7 +76,6 @@ const Index = () => {
               </div>
             </div>
           </section>
-          <Statistic></Statistic>
           <section className="p-t-20">
             <div className="container">
               <div className="row">

@@ -5,7 +5,6 @@ const routerPath = [
   { pathName: "Login", url: "/" },
   { pathName: "Dashboard", url: "/dashboard" },
   { pathName: "Blog", url: "/blog" },
-  { pathName: "Menu", url: "/menu" },
   { pathName: "Register", url: "/register" }
 ];
 

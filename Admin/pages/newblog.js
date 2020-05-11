@@ -2,9 +2,7 @@ import Layout from "../components/Layout";
 import React, { Component, useEffect, useState } from "react";
 import { Toast, Row, Col, Button } from "react-bootstrap";
 import { firebase, storage } from "../firebase";
-import { useRouter } from "next/router";
 const newBlog = () => {
-  const Router = useRouter();
   const [showToast, setShowToast] = useState(false);
   const [value, setValue] = useState({});
   console.log(value);
@@ -95,8 +93,19 @@ const newBlog = () => {
                       />
                     </div>
                     <div className="form-group">
+                      <label>Date</label>
+                      <input
+                      type="date"
+                        className="form-control"
+                        onChange={(e) =>
+                          setValue({ ...value, date: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="form-group">
                       <label>Author</label>
-                      <textarea
+                      <input
+                      type="text"
                         className="form-control"
                         onChange={(e) =>
                           setValue({ ...value, author: e.target.value })

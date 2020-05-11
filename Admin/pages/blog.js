@@ -5,7 +5,6 @@ import { Button } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import React, { useState, useEffect, Children } from "react";
 import Statistic from "../components/statistic";
-import withAuth from "../withAuth";
 import Link from "next/link";
 const MyButton = React.forwardRef(
   ({ onClick, href, children, className }, ref) => {
@@ -31,32 +30,29 @@ const Blog = () => {
         setArticle(arrData);
       });
   }, [article]);
-  const onDelete = (id) => {
-    if (window.confirm("Are you sure you wish to delete this ???")) {
-      firebase
-        .firestore()
-        .collection("reservation")
-        .doc(id)
-        .delete()
-        .catch((error) => console.log(error));
-    }
+  const[items,setItems]=useState()
+  const selectDelete=(e)=>{
+        setItems(
+          article.filter((f) => {
+            return f.id === e;
+          })[0]
+        );
+        handleShow();
+  }
+  const onDelete = () => {
+    console.log(article.id)
+      // firebase
+      //   .firestore()
+      //   .collection("articles")
+      //   .doc(`${article.id}`)
+      //   .delete()
+      //   .catch((error) => console.log(error));
+        handleClose();
   };
-  const [person, setPerson] = useState({});
-  const editData = (e) => {
-    handleShow();
-    setPerson(
-      guests.filter((f) => {
-        return f.id === e;
-      })[0]
-    );
-  };
-  const saveValue = () => {
-    firebase.firestore().collection("reservation").doc(person.id).set(person);
-  };
-  const [data, setData] = useState({});
-  const addGuest = () => {
-    firebase.firestore().collection("reservation").add(data);
-  };
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <Layout>
       <div className="page-wrapper">
@@ -100,10 +96,30 @@ const Blog = () => {
                           <th>Category</th>
                         </tr>
                       </thead>
-
+                            <Modal show={show} onHide={handleClose}>
+                              <Modal.Header closeButton>
+                                <Modal.Title>Delete</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                Are you sure you wish to delete this ???
+                              </Modal.Body>
+                              <Modal.Footer>
+                                <Button
+                                  variant="secondary"
+                                  onClick={handleClose}
+                                >
+                                  No
+                                </Button>
+                                <Button variant="primary" onClick={()=>onDelete()}>
+                                  Yes
+                                </Button>
+                              </Modal.Footer>
+                            </Modal>
                       <tbody>
                         {article.map((data) => (
                           <>
+
+                            
                             <tr className="tr-shadow" key={data.id}>
                               <td>
                                 <img
@@ -120,11 +136,26 @@ const Blog = () => {
                                 </span>
                               </td>
                               <td>
-                                <Link href="[id]" as={`${data.slug}`} passHref>
-                                  <MyButton>
-                                    Edit
-                                  </MyButton>
-                                </Link>
+                                <div className="table-data-feature">
+                                  <Link
+                                    href="[id]"
+                                    as={`${data.slug}`}
+                                    passHref
+                                  >
+                                    <MyButton className="item">
+                                      <i className="zmdi zmdi-edit" />
+                                    </MyButton>
+                                  </Link>
+                                  <button
+                                    className="item"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Delete"
+                                    onClick={selectDelete}
+                                  >
+                                    <i className="zmdi zmdi-delete" />
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                             <tr className="spacer" />
