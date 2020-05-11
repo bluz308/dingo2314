@@ -5,7 +5,7 @@ import "firebase/database";
 import "firebase/storage"
 // Your web app's Firebase configuration
 const config = {
-  apiKey: "AIzaSyAnfD9rwyDfT7FToySvYxukautWWJ-Y36k",
+  apiKey: "AIzaSyBd9UvPGFOFfHrmtNfFwn6TRRaN1EohAFk",
   authDomain: "dingo-2314.firebaseapp.com",
   databaseURL: "https://dingo-2314.firebaseio.com",
   projectId: "dingo-2314",
